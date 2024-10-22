@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tickets Booking</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-image: linear-gradient(to bottom right, rgb(243, 219, 151), rgb(241, 184, 118));
+            height: 750px;
+            font-family: Arial, sans-serif;
+        }
+        #slide {
+            position: relative;
+            max-width: 100%;
+            margin: auto;
+            overflow: hidden;
+        }
+        #div1 {
+            display: flex;
+            justify-content: space-evenly;
+            background-color: orange;
+            font-size: 20px;
+            color: maroon;
+            height: 30px;
+            align-items: center;
+        }
+        .menu:hover {
+            color: aqua;
+            background-color: orangered;
+            font-size: 30px;
+        }
+        .movie-section {
+            display: flex;
+            justify-content: space-evenly;
+            align-items: center;
+            padding: 20px;
+            margin: 10px;
+        }
+        #main1 {
+            background-image: linear-gradient(to bottom right, black, rgb(39, 39, 39), rgb(90, 89, 89), rgb(116, 115, 115));
+        }
+        #main2 {
+            background-image: linear-gradient(to bottom right, maroon, brown, white);
+        }
+        #main3 {
+            background-image: linear-gradient(to bottom right, orangered, orange);
+        }
+        #main4 {
+            background-image: linear-gradient(to bottom right, rgb(235, 76, 76), rgb(211, 109, 41), rgb(226, 153, 17));
+        }
+        .movie-details {
+            color: white;
+            text-align: center;
+        }
+        button {
+            height: 40px;
+            width: 100px;
+            background-color: red;
+            color: white;
+            border: none;
+            cursor: pointer;
+            margin: 5px;
+        }
+        .menu {
+            text-decoration: none;
+            color: maroon;
+            cursor: pointer;
+        }
+        .image {
+            height: 300px;
+        }
+        .movie {
+            height: 500px;
+            width: 100%;
+        }
+        .book {
+            text-decoration: none;
+            color: white;
+            cursor: pointer;
+        }
+        #search-container {
+            text-align: center;
+            margin: 20px 0;
+        }
+        input[type="text"] {
+            height: 40px;
+            width: 200px;
+            padding: 10px;
+            font-size: 20px;
+            border-radius: 15pt;
+        }
+    </style>
+    <script>
+        let slideIndex = 0;
+
+        function slideShow() {
+            let i;
+            const slides = document.getElementsByClassName("sub");
+            for (i = 0; i < slides.length; i++) {
+                slides[i].style.display = "none";
+            }
+            slideIndex++;
+            if (slideIndex > slides.length) {
+                slideIndex = 1;
+            }
+            slides[slideIndex - 1].style.display = "block";
+            setTimeout(slideShow, 3000);
+        }
+
+        function filterMovies() {
+            const input = document.getElementById("search-bar").value.toLowerCase();
+            const movieSections = document.querySelectorAll('.movie-section');
+
+            movieSections.forEach(section => {
+                const hallName = section.querySelector('h3').textContent.toLowerCase();
+                section.style.display = hallName.includes(input) ? 'flex' : 'none';
+            });
+        }
+
+        window.onload = slideShow;
+    </script>
+</head>
+<body>
+    <div id="div1">
+        <div><a href="Booking.html" class="menu">Home</a></div>
+        <div><a href="About.html" class="menu">About Us</a></div>
+        <div><a href="Review.html" class="menu">Reviews</a></div>
+        <div><a href="Give_Rating.html" class="menu">Give Ratings</a></div>
+    </div>
+    <br>
+    <div id="slide">
+        <div class="sub fade">
+            <img src="movies/offers.jpg" class="movie" alt="Offers">
+        </div>
+        <div class="sub fade">
+            <img src="movies/offers2.jpg" class="movie" alt="Offers2">
+        </div>
+        <div class="sub fade">
+            <img src="movies/parking.png" class="movie" alt="Parking">
+        </div>
+    </div>
+    
+    <div id="search-container">
+        <input type="text" id="search-bar" placeholder="Search theater" onkeyup="filterMovies()">
+    </div>
+
+    <div id="main1" class="movie-section">
+        <div class="movie-image">
+            <img src="movies/devara.jpg" alt="Devara" class="image">
+        </div>
+        <div class="movie-details">
+            <h2>Movie: Devara</h2>
+            <h3>Hall: Komala</h3>
+            <a href="Seating.html" class="book"><button>Book</button></a>
+        </div>
+    </div>
+    <div id="main2" class="movie-section">
+        <div class="movie-image">
+            <img src="movies/gabber.jpg" alt="Gabber Singh" class="image">
+        </div>
+        <div class="movie-details">
+            <h2>Movie: Gabber Singh</h2>
+            <h3>Hall: Komala</h3>
+            <a href="Seating.html" class="book"><button>Book</button></a>
+        </div>
+    </div>
+    <div id="main3" class="movie-section">
+        <div class="movie-image">
+            <img src="movies/Kalki.jpg" alt="Kalki 2898 AD" class="image">
+        </div>
+        <div class="movie-details">
+            <h2>Movie: Kalki 2898 AD</h2>
+            <h3>Hall: Sagar</h3>
+            <a href="Seating.html" class="book"><button>Book</button></a>
+        </div>
+    </div>
+    <div id="main4" class="movie-section">
+        <div class="movie-image">
+            <img src="movies/Nani.jpg" alt="Saripoda Sanivaram" class="image">
+        </div>
+        <div class="movie-details">
+            <h2>Movie: Saripoda Sanivaram</h2>
+            <h3>Hall: Sagar</h3>
+            <a href="Seating.html" class="book"><button>Book</button></a>
+        </div>
+    </div>
+</body>
+</html>
+

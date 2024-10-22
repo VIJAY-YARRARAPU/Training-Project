@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Theater Booking</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        h1 {
+            text-align: center;
+            background-color: aqua;
+            padding: 10px;
+            margin: 0;
+        }
+        h2 {
+            text-align: left;
+        }
+        table {
+            width: 80%;
+            margin: 20px auto;
+            display: none; /* Hide all tables initially */
+        }
+        th, td {
+            border: 0;
+            padding: 10px;
+            text-align: center;
+            cursor: pointer;
+        }
+        th {
+            background-color: rgb(221, 220, 220);
+        }
+        td {
+            vertical-align: middle;
+            transition: background-color 0.3s;
+        }
+        td:hover {
+            background-color: lime;
+        }
+        .selected {
+            background-color: green !important;
+        }
+        .booked {
+            background-color: rgba(0, 128, 0, 0.5) !important;
+            pointer-events: none;
+        }
+        #box {
+            width: 100%;
+            height: 35px;
+            display: none; /* Hide screen div initially */
+            justify-content: center;
+            margin-top: 10px;
+        }
+        #screen {
+            background-color: gray;
+            height: 35px;
+            width: 250px;
+            border: 5px solid lightgray;
+            border-radius: 10px;
+            text-align: center;
+            line-height: 35px;
+            color: white;
+        }
+        button {
+            background-color: lime;
+            border: 0;
+            height: 70px;
+            width: 125px;
+            margin: 10px;
+        }
+        #butt {
+            display: flex;
+            justify-content: center;
+        }
+        .dropdown {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 10px;
+            text-align: left;
+            width: 100%;
+        }
+        #dropdownButton {
+            background-color: yellow;
+            padding: 10px;
+            cursor: pointer;
+        }
+        .dropdown-content {
+            display: none; /* Initially hidden */
+            position: absolute;
+            left: 20%;
+            transform: translateX(-50%);
+            top: 100%;
+            background-color: orange;
+            display: flex; /* Display the items as flex */
+            flex-direction: row; /* Arrange items in a row */
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+            text-align: left;
+        }
+        .dropdown-content a {
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            min-width: 100px; /* Adjust width to ensure they appear in a row */
+        }
+        .dropdown-content a:hover {
+            background-color: orangered;
+        }
+    </style>
+</head>
+<body>
+    <h1>Theater Seat Booking</h1>
+    <h2>Select Seats:</h2>
+
+    <div class="dropdown">
+        <button id="dropdownButton">Select Timing</button>
+        <div class="dropdown-content" id="dropdownContent">
+            <a href="#" onclick="showTable('noon')">Noon Show</a>
+            <a href="#" onclick="showTable('matinee')">Matinee Show</a>
+            <a href="#" onclick="showTable('first')">First Show</a>
+            <a href="#" onclick="showTable('second')">Second Show</a>
+        </div>
+    </div>
+
+    <div id="butt"><button onclick="bookSeats()">Book</button></div>
+
+    <!-- Create 4 separate tables for each show time -->
+    <table id="noon" class="show-table"></table>
+    <table id="matinee" class="show-table"></table>
+    <table id="first" class="show-table"></table>
+    <table id="second" class="show-table"></table>
+
+    <div id="box">
+        <div id="screen">SCREEN</div>
+    </div>
+
+    <script>
+        const dropdownButton = document.getElementById('dropdownButton');
+        const dropdownContent = document.getElementById('dropdownContent');
+        const showTables = ['noon', 'matinee', 'first', 'second'];
+        const screenDiv = document.getElementById('box');
+
+        // Toggle the dropdown menu visibility when clicking the button
+        dropdownButton.addEventListener('click', () => {
+            dropdownContent.style.display = dropdownContent.style.display === 'flex' ? 'none' : 'flex';
+        });
+
+        // Hide the dropdown menu when clicking outside of it
+        window.addEventListener('click', (event) => {
+            if (!dropdownButton.contains(event.target) && !dropdownContent.contains(event.target)) {
+                dropdownContent.style.display = 'none';
+            }
+        });
+
+        function showTable(show) {
+            showTables.forEach((tableId) => {
+                const table = document.getElementById(tableId);
+                table.style.display = tableId === show ? 'table' : 'none';
+            });
+            screenDiv.style.display = 'flex';  // Display the screen div when a show is selected
+            loadSeats(show);
+        }
+
+        function createSeats(tableId) {
+            const table = document.getElementById(tableId);
+            table.innerHTML = '<thead><tr><th>S.No</th><th>A</th><th>B</th><th>C</th><th>D</th><th>E</th><th>F</th><th>G</th><th>H</th><th>I</th><th>J</th></tr></thead><tbody></tbody>';
+
+            const tbody = table.querySelector('tbody');
+            for (let i = 1; i <= 10; i++) {
+                const row = document.createElement('tr');
+                row.innerHTML = `<th>${i}</th>`;
+                for (let j = 0; j < 10; j++) {
+                    const cell = document.createElement('td');
+                    const seatId = `${tableId}-${i}-${j}`;
+                    cell.setAttribute('data-seat', seatId);
+                    cell.innerHTML = '<i class="fa-solid fa-couch"></i>';
+                    cell.addEventListener('click', () => toggleSeat(cell));
+                    row.appendChild(cell);
+                }
+                tbody.appendChild(row);
+            }
+        }
+
+        showTables.forEach(createSeats);
+
+        function toggleSeat(cell) {
+            const seatId = cell.getAttribute('data-seat');
+            const currentShow = seatId.split('-')[0];
+
+            if (cell.classList.contains('selected')) {
+                cell.classList.remove('selected');
+                removeSeatFromStorage(seatId, currentShow);
+            } else {
+                cell.classList.add('selected');
+                addSeatToStorage(seatId, currentShow);
+            }
+        }
+
+        function addSeatToStorage(seatId, show) {
+            const seats = JSON.parse(localStorage.getItem(`${show}SelectedSeats`)) || [];
+            if (!seats.includes(seatId)) {
+                seats.push(seatId);
+                localStorage.setItem(`${show}SelectedSeats`, JSON.stringify(seats));
+            }
+        }
+
+        function removeSeatFromStorage(seatId, show) {
+            let seats = JSON.parse(localStorage.getItem(`${show}SelectedSeats`)) || [];
+            seats = seats.filter(seat => seat !== seatId);
+            localStorage.setItem(`${show}SelectedSeats`, JSON.stringify(seats));
+        }
+
+        function bookSeats() {
+            const currentShow = showTables.find(id => document.getElementById(id).style.display === 'table');
+            if (currentShow) {
+                const seats = document.querySelectorAll(`#${currentShow} .selected`);
+                if (seats.length > 0) {
+                    const bookedSeats = JSON.parse(localStorage.getItem(`${currentShow}BookedSeats`)) || [];
+                    seats.forEach(seat => {
+                        const seatId = seat.getAttribute('data-seat');
+                        bookedSeats.push(seatId);
+                        seat.classList.add('booked');
+                    });
+                    localStorage.setItem(`${currentShow}BookedSeats`, JSON.stringify([...new Set(bookedSeats)]));
+                    seats.forEach(seat => seat.classList.remove('selected'));
+                    window.open('Payment.html', '_self'); // Redirect to Payment.html
+                } else {
+                    alert('Select at least one seat to book.');
+                }
+            } else {
+                alert('Select a show time first.');
+            }
+        }
+
+        function loadSeats(show) {
+            const selectedSeats = JSON.parse(localStorage.getItem(`${show}SelectedSeats`)) || [];
+            const bookedSeats = JSON.parse(localStorage.getItem(`${show}BookedSeats`)) || [];
+
+            selectedSeats.forEach(seatId => {
+                const cell = document.querySelector(`td[data-seat="${seatId}"]`);
+                if (cell) cell.classList.add('selected');
+            });
+
+            bookedSeats.forEach(seatId => {
+                const cell = document.querySelector(`td[data-seat="${seatId}"]`);
+                if (cell) cell.classList.add('booked');
+            });
+        }
+    </script>
+</body>
+</html>
